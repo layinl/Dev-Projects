@@ -16,31 +16,18 @@ long time_start = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::
 int time_total_seconds(){
 	long now = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count() - time_start;
 }
-int miliseconds = 0;;
-int seconds = 0;
-void add_second();
-int minutes = 0;
-void add_minute();
-int hours = 0;
-void add_hour();
-int days = 0;
-void add_day();
-int months = 0;
-void add_month();
-int years = 0;
-void add_year();
 
 struct quest{
 	char name[100];
 	char briefing[500];
 	int status; // 0 = inactive;  
 };
-struct quest quests[1000];
+struct quest questDB[1000];
 
 struct quest findQuestByName(char name[]){
 	for(int i=0; i<1000; i++){
-		if(strcmp(quests[i].name, name)==0){
-			return quests[i];
+		if(strcmp(questDB[i].name, name)==0){
+			return questDB[i];
 		}
 	}
 }
@@ -54,12 +41,12 @@ struct player {
 	int gold = 15;
 	
 	// quests
-	struct quest quests[25];
+	struct quest quests[300];
 	int last_quest_added = 0;
-	int quests_completed[25];
-	void addQuest(char name[100]){
-		quests[last_quest_added] = findQuestByName("Reconstruir Poço");
-		last_quest_added;
+	int quests_completed[300];
+	void addQuest(char name[]){
+		quests[last_quest_added] = findQuestByName(name);
+		last_quest_added++;
 	};
 	
 	// attributes
@@ -147,8 +134,6 @@ void create_enemies2() {
 }
 */
 
-
-
 /*
 void create_enemies3() {
 	if (enemies3_not_exist){
@@ -162,72 +147,166 @@ void create_enemies3() {
 }
 */
 
-void add_milisecond(){
+
+// Variables to define measurement sizes
+int miliseconds_in_a_second = 1000;
+int seconds_in_a_minute = 60;
+int minutes_in_an_hour = 60;
+int hours_in_a_day = 24;
+int days_in_a_month = 30;
+int months_in_a_year = 12;
+
+
+// Variables
+int miliseconds = 0;
+int seconds = 0;
+int minutes = 0;
+int hours = 0;
+int days = 0;
+int months = 0;
+int years = 0;
+
+// Functions
+
+	// Declarations
+void addMilisecond();
+void passMilisecond();
+void passXMiliseconds();
+void addSecond();
+void passSecond();
+void passXSeconds();
+void addMinute();
+void passMinute();
+void passXMinutes();
+void addHour();
+void passHour();
+void passXHours();
+void addDay();
+void passDay();
+void passXDays();
+void addMonth();
+void passMonth();
+void passXMonths();
+void addYear();
+void passYear();
+void passXYears();
+
+
+void addMilisecond(){
 	miliseconds++;
-	add_second();
+	addSecond();
 }
 
-void add_second(){
-	if(miliseconds>=1000){
-		miliseconds = miliseconds - 1000;
+void addSecond(){
+	if(miliseconds>=miliseconds_in_a_second){
+		miliseconds = miliseconds - miliseconds_in_a_second;
 		seconds++;
-		add_minute();
+		addMinute();
 	}
 }
 
-void add_minute(){
-	if(seconds>=50){
-		seconds = seconds - 50;
+void addMinute(){
+	if(seconds>=seconds_in_a_minute){
+		seconds = seconds - seconds_in_a_minute;
 		minutes++;
-		add_hour();
+		addHour();
 	}
 }
 
-void add_hour(){
-	if(minutes>=50){
-		minutes = minutes - 50;
+void addHour(){
+	if(minutes>=minutes_in_an_hour){
+		minutes = minutes - minutes_in_an_hour;
 		hours++;
-		add_day();
+		addDay();
 	}
 }
 
-void add_day(){
-	if(hours>=20){
-		hours = hours - 20;
+void addDay(){
+	if(hours>=hours_in_a_day){
+		hours = hours - hours_in_a_day;
 		days++;
-		add_month();
+		addMonth();
 	}
 }
 
-void add_month(){
-	if(days>=40){
-		days = days - 40;
+void addMonth(){
+	if(days>=days_in_a_month){
+		days = days - days_in_a_month;
 		months++;
-		add_year();
+		addYear();
 	}
 }
 
-void add_year(){
-	if(months>=10){
-		months = months - 60;
+void addYear(){
+	if(months>=months_in_a_year){
+		months = months - months_in_a_year;
 		years++;
 	}
 }
 
-void pass_x_miliseconds(int x){
+void passXMiliseconds(int x){
 	for(int i=0; i<x; i++){
-		add_milisecond();
+		addMilisecond();
 	}
 }
 
-void pass_second(){
-	pass_x_miliseconds(1000);
+void passSecond(){
+	passXMiliseconds(miliseconds_in_a_second);
 }
 
-void pass_x_seconds(int x){
+void passXSeconds(int x){
 	for(int i=0; i<x; i++){
-		pass_second();
-		printf("\nPassed %d second(s).", i);
+		passSecond();
+	}
+}
+
+void passMinute(){
+	passXSeconds(seconds_in_a_minute);
+}
+
+void passXMinutes(int x){
+	for(int i=0; i<x; i++){
+		passMinute();
+	}
+}
+
+void passHour(){
+	passXMinutes(minutes_in_an_hour);
+}
+
+void passXHours(int x){
+	for(int i=0; i<x; i++){
+		passHour();
+	}
+}
+
+void passDay(){
+	passXHours(hours_in_a_day);
+}
+
+void passXDays(int x){
+	for(int i=0; i<x; i++){
+		passDay();
+	}
+}
+
+void passMonth(){
+	passXDays(days_in_a_month);
+}
+
+void passXMonths(int x){
+	for(int i=0; i<x; i++){
+		passMonth();
+	}
+}
+
+void passYear(){
+	passXMonths(months_in_a_year);
+}
+
+void passXYears(int x){
+	for(int i=0; i<x; i++){
+		passYear();
 	}
 }
 
@@ -237,6 +316,29 @@ void create_enemy(char name[50], int damage, int max_health){
 	ey_db[last_ey_created].max_health = max_health;
 	ey_db[last_ey_created].health = max_health;
 	last_ey_created++;
+}
+
+void explorar101_loot(int max){
+	int die2 = rng(1, max);
+	if(die2<=10){
+		printf("\nNão encontrou nada de útil.");
+	} else if(die2<=30) {
+		printf("\nEncontrou 1 Madeira!");
+	} else if(die2<=50) {
+		printf("\nEncontrou 1 Pedra!");
+	} else if(die2<=60){
+		printf("\nEncontrou 1 Corda!");
+	} else if(die2<=65){
+		printf("\nEncontrou 1 Madeira, 1 Pedra e 1 Corda!");
+	} else if(die2<=80){
+		printf("\nEncontrou 2 Madeiras!");
+	} else if(die2<=90){
+		printf("\nEncontrou 2 Pedras!");
+	} else if(die2<=98){
+		printf("\nEncontrou 2 Cordas!");
+	} else {
+		printf("\nEncontrou 2 Madeira, 2 Pedra e 2 Corda!");
+	}
 }
 
 void explorar101_loot(){
@@ -263,9 +365,9 @@ void explorar101_loot(){
 }
 void explorar101(){
 	int die = rng(1, 100);
-	if(die<=75){
+	if(die<=50){
 		explorar101_loot();
-	} else if(die<=90) {
+	} else if(die<=75) {
 		int die2 = rng(1,20);
 		if(die2<=12){
 			if(!py.jaDescobriu("Poço", "this")){
@@ -273,21 +375,21 @@ void explorar101(){
 				printf("\nDescobriu um Poço!");
 				py.addQuest("Reconstruir Poço");
 			} else {
-				explorar101_loot();
+				explorar101_loot(50);
 			}
 		} else if(die2<=19){
 			if(!py.jaDescobriu("Floresta", "this")){
 				py.desc_lug("Floresta");
 				printf("\nDescobriu uma Floresta!");
 			} else {
-				explorar101_loot();
+				explorar101_loot(80);
 			}
 		} else if(die2==20){
 			if(!py.jaDescobriu("Biblioteca", "this")){
 				py.desc_lug("Biblioteca");
 				printf("\nDescobriu uma Biblioteca!");
 			} else {
-				explorar101_loot();
+				explorar101_loot(150);
 			}
 		}
 	} else if(die<=90) {
